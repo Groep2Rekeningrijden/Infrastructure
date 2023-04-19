@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: metallb.io/v1beta1
+    kind: IPAddressPool
+    metadata:
+      name: kong-ip-pool
+      namespace: metallb-system
+    spec:
+      addresses:
+        - 127.0.0.100-127.0.0.110
+
+  - apiVersion: metallb.io/v1beta1
+    kind: L2Advertisement
+    metadata:
+      name: kong-advertisement
+      namespace: metallb-system

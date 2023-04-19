@@ -1,0 +1,2 @@
+vars:
+  ingressController.admissionWebhook.enabled: true

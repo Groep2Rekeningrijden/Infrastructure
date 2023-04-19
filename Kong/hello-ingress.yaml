@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hello-minikube
+  annotations:
+    kubernetes.io/ingress.class: "kong"
+spec:
+  ingressClassName: kong
+  rules:
+  - host: hello-minikube.info
+    http:
+      paths:
+      - path: /hello
+        pathType: Prefix
+        backend:
+          service:
+            name: hello-minikube
+            port:
+              number: 8080
