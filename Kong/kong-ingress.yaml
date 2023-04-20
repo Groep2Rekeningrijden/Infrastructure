@@ -5,7 +5,7 @@ metadata:
   namespace: default
   annotations:
     konghq.com/strip-path: 'true'
-    metallb.universe.tf/loadBalancerIPs: 127.0.0.101
+    metallb.universe.tf/loadBalancerIPs: 127.0.0.241
 spec:
   ingressClassName: kong
   rules:

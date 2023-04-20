@@ -22,5 +22,21 @@ Install via Helm
 
 ```shell
 helm repo add metallb https://metallb.github.io/metallb
-helm install metallb metallb/metallb -f Metallb/metallb-config.yaml
+```
+
+```shell
+helm repo update
+helm install metallb metallb/metallb -f Metallb/helm-config.yaml
+```
+
+Apply
+
+```shell
+kubectl apply -f Metallb/metallb.yaml
+```
+
+This should expose the services to localhost without tunneling. You can find their IPs with:
+
+```shell
+kubectl get services --all-namespaces
 ```
