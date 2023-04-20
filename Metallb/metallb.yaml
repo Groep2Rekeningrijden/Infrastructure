@@ -14,4 +14,4 @@ items:
     kind: L2Advertisement
     metadata:
       name: kong-advertisement
-      namespace: metallb-system
+      namespace: default

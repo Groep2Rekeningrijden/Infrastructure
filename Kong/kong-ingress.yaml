@@ -5,15 +5,24 @@ metadata:
   namespace: default
   annotations:
     konghq.com/strip-path: 'true'
+    metallb.universe.tf/loadBalancerIPs: 127.0.0.101
 spec:
   ingressClassName: kong
   rules:
-   - http:
-      paths:
-      - path: /echo
-        pathType: Prefix
-        backend:
-          service:
-            name: echo
-            port:
-              number: 80
+#    We can use host: HOST_URL to specify that a set of paths resolves only if from that host
+    - http:
+        paths:
+          - path: /echo
+            pathType: Prefix
+            backend:
+              service:
+                name: echo
+                port:
+                  number: 80
+          - path: /kc
+            pathType: Prefix
+            backend:
+              service:
+                name: keycloak
+                port:
+                  number: 8080
