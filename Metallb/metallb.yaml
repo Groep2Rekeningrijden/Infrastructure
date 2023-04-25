@@ -17,7 +17,7 @@ items:
       namespace: default
     spec:
       addresses:
-        - 192.168.58.240/28
+        -  172.31.176.240/28
 
   - apiVersion: metallb.io/v1beta1
     kind: L2Advertisement
