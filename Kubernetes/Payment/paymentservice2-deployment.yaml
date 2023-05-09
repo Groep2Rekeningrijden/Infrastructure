@@ -1,33 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -f docker-compose.yml
-    kompose.version: 1.26.0 (40646f47)
-  creationTimestamp: null
-  labels:
-    io.kompose.service: paymentservice2
-  name: paymentservice2
+  name: paymentservice2-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: paymentservice2
-  strategy: {}
+      app: paymentservice2
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -f docker-compose.yml
-        kompose.version: 1.26.0 (40646f47)
-      creationTimestamp: null
       labels:
-        io.kompose.service: paymentservice2
+        app: paymentservice2
     spec:
       containers:
-        - image: paymentservice2
-          name: paymentservice2
-          ports:
-            - containerPort: 80
-          resources: {}
-      restartPolicy: Always
-status: {}
+        - name: paymentservice2
+          image: paymentservice2
+          imagePullPolicy: Never
+
