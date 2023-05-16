@@ -1,0 +1,40 @@
+version: '3.4'
+
+services:  
+  coords:
+    image: ${DOCKER_REGISTRY-}coordinateservice
+    ports: 
+        - "5050:80"  
+    depends_on:
+      - rabbitmq
+  kweetRead:
+    image: ${DOCKER_REGISTRY-}routerapi
+    ports: 
+        - "5053:80" 
+    depends_on:
+      - mongodb
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongoDB        
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo
+    container_name: mongoDB-coordinateservice
+    ports:
+      - 27017:27017
+  rabbitmq:
+    container_name: "rabbitmq"
+    image: rabbitmq:3.8-management-alpine
+    environment:
+     - RABBITMQ_DEFAULT_USER=guest
+     - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+            # AMQP protocol port
+     - '5672:5672'
+            # HTTP management UI
+     - '15672:15672'
