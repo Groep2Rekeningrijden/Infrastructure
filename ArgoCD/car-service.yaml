@@ -2,6 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: car-service
+  namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -12,7 +13,7 @@ spec:
     targetRevision: '*'
   destination:
     server: https://kubernetes.default.svc
-    namespace: rekeningrijden
+    namespace: default
   revisionHistoryLimit: 3
   syncPolicy:
     syncOptions:
