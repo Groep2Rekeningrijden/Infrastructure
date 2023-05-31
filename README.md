@@ -1,19 +1,74 @@
-# Minikube
+# About this reposity
 
-You can have multiple minikube profiles by starting a cluster with the following command:
+This repo is based of off the [kind-playground](https://github.com/eddycharly/kind-playground) repository by Eddy Charly.
+I updated the scripts they wrote, fixed a bunch of issues I ran into, and then adjusted it to work my project.
+
+# Stuff so this works
+
+## Make sure you have required stuff
+
+- Docker: https://docs.docker.com/get-docker/
+- kubectl: https://kubernetes.io/docs/tasks/tools/
+- Helm: https://helm.sh/docs/intro/install/
+- Kind: https://kind.sigs.k8s.io/
+- Terraform: https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
+
+## Install dnsmasq
+
+Install it
 
 ```shell
-minikube start -p profile_name
+sudo apt-get install dnsmasq
 ```
 
-You can then set that as the active profile for commands with:
+and create a `dnsmasq.conf` file in `/etc/dnsmasq.d/` with the following content:
 
-```shell
-minikube profile profile_name
+```
+bind-interfaces
+listen-address=127.0.0.1
+server=8.8.8.8
+server=8.8.4.4
+conf-dir=/etc/dnsmasq.d/,*.conf
 ```
 
-And back to default with:
+and restart the service with
 
 ```shell
-minikube profile default
+sudo systemctl restart dnsmasq
+```
+
+Then set dnsmasq als your dns by adding the following to `/etc/systemd/resolved.conf`
+
+```
+DNS=127.0.0.1
+DNSStubListener=no
+```
+
+and restart the resolver with
+
+```shell
+sudo systemctl restart systemd-resolved
+```
+
+## Increase file watch capacity
+
+Increase system file watch capacity if nodes fail to start with "too many files open":
+
+```shell
+sudo sysctl fs.inotify.max_user_instances=1280
+sudo sysctl fs.inotify.max_user_watches=655360
+```
+
+## Finally, run it
+
+```shell
+./_bootstrap.sh --kube-prometheus-stack
+```
+
+## For now
+
+Install the helm chart for kwetter-web manually (run in the kwetter-web dir)
+
+```shell
+helm install kwetter-web .
 ```
