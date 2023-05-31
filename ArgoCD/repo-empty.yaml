@@ -6,7 +6,8 @@ metadata:
   labels:
     argocd.argoproj.io/secret-type: repository
 stringData:
-  type: "git"
+  type: "helm"
+  name: "rekeningrijden"
   url: "https://groep2rekeningrijden.github.io/charts/"
-  username: <FILL THIS>
-  password: <FILL THIS>
+  username: <username>
+  password: <password>
