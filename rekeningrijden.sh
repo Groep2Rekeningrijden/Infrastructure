@@ -17,3 +17,4 @@ deploy rabbitmq
 deploy car-service
 deploy coordinate-service
 deploy router-api
+deploy payment-service

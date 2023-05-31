@@ -27,3 +27,4 @@ spec:
       - CreateNamespace=true
       - ApplyOutOfSyncOnly=true
       - PruneLast=true
+    automated: {}

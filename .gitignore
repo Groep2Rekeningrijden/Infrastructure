@@ -1,1 +1,5 @@
+.ssl
+.tf-state
+.terraform.lock.hcl
+.terraform
 repo.yaml

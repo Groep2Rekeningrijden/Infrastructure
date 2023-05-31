@@ -73,8 +73,6 @@ if [ "$KUBE_PROMETHEUS_STACK" == "true" ]; then
     ./kube-prometheus-stack.sh
 fi
 
-if [ "$GITOPS" == "true" ]; then
-    ./gitops.sh
-else
-    ./argocd-applications.sh
-fi
+./argocd-applications.sh
+./rekeningrijden.sh
+
