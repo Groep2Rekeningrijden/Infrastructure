@@ -11,11 +11,11 @@ deploy(){
 }
 
 wait_for_pods(){
-  kubectl wait --for=condition=Ready pods --all --all-namespaces
+  kubectl wait --for=condition=Ready pods --all --all-namespaces --timeout=300s
 }
 # RUN
 
-wait_for_pods
+#wait_for_pods
 deploy repo
 deploy rabbitmq
 deploy car-service

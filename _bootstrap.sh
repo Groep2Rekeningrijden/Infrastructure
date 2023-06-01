@@ -12,6 +12,12 @@ log(){
   echo $1
   echo "---------------------------------------------------------------------------------------"
 }
+
+set_file_readers(){
+  sudo sysctl fs.inotify.max_user_instances=1280
+  sudo sysctl fs.inotify.max_user_watches=655360
+}
+
 verifySupported(){
   if ! type "kubectl" > /dev/null 2>&1; then
     echo "kubectl is required"
@@ -63,6 +69,7 @@ done
 set +u
 
 verifySupported
+set_file_readers
 
 ./cluster.sh
 ./keycloak.sh
@@ -74,5 +81,5 @@ if [ "$KUBE_PROMETHEUS_STACK" == "true" ]; then
 fi
 
 ./argocd-applications.sh
-./rekeningrijden.sh
+#./rekeningrijden.sh
 
