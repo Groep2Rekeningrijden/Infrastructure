@@ -12,6 +12,7 @@ deploy(){
 
 # RUN
 
+sleep 20
 deploy repo
 deploy rabbitmq
 deploy car-service

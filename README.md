@@ -65,10 +65,15 @@ sudo sysctl fs.inotify.max_user_watches=655360
 ./_bootstrap.sh --kube-prometheus-stack
 ```
 
-## For now
+## In case stuff doesn't work
 
-Install the helm chart for kwetter-web manually (run in the kwetter-web dir)
-
+Try deleting all:
+1. Kubernetes resources
 ```shell
-helm install kwetter-web .
+kubectl delete all --all
 ```
+2. Dangling docker volumes
+```shell
+docker volume prune
+```
+3. Reinstalling the cluster by running the bootstrap script
