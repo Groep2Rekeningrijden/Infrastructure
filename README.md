@@ -65,6 +65,10 @@ sudo sysctl fs.inotify.max_user_watches=655360
 ./_bootstrap.sh --kube-prometheus-stack
 ```
 
+```shell
+./rekeningrijden.sh
+```
+
 ## In case stuff doesn't work
 
 Try deleting all:
