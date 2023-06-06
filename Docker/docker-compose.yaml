@@ -8,10 +8,14 @@ services:
     depends_on:
       - rabbitmq
       - coordinate-service-mongo
+    networks:
+      - rekeningrijden
   coordinate-service-mongo:
     image: mongo
     ports:
       - "27018:27017"
+    networks:
+      - rekeningrijden
   coordinate-service-mongo-express:
     image: mongo-express
     restart: always
@@ -21,6 +25,8 @@ services:
       ME_CONFIG_MONGODB_SERVER: coordinate-service-mongo
     depends_on:
       - coordinate-service-mongo
+    networks:
+      - rekeningrijden
 
   router-api:
     image: fontyssa/router-api
@@ -28,6 +34,8 @@ services:
       - "5053:80"
     depends_on:
       - rabbitmq
+    networks:
+      - rekeningrijden
 
   data-service:
     image: fontyssa/data-service
@@ -36,10 +44,14 @@ services:
     depends_on:
       - rabbitmq
       - data-service-mongo
+    networks:
+      - rekeningrijden
   data-service-mongo:
     image: mongo
     ports:
       - "27017:27017"
+    networks:
+      - rekeningrijden
   data-service-mongo-express:
     image: mongo-express
     restart: always
@@ -49,6 +61,8 @@ services:
       ME_CONFIG_MONGODB_SERVER: data-service-mongo
     depends_on:
       - data-service-mongo
+    networks:
+      - rekeningrijden
 
   car-service:
     image: fontyssa/car-service
@@ -56,6 +70,8 @@ services:
       - "5055:80"
     depends_on:
       - car-db
+    networks:
+      - rekeningrijden
   car-db:
     image: fontyssa/postgres-extended
     restart: always
@@ -67,6 +83,8 @@ services:
       - '5432:5432'
     volumes:
       - car-db:/var/lib/postgresql/data
+    networks:
+      - rekeningrijden
 
   payment-service:
     image: fontyssa/payment-service
@@ -75,6 +93,8 @@ services:
     restart: on-failure
     depends_on:
       - payment-service-mysql
+    networks:
+      - rekeningrijden
   payment-service-mysql:
     container_name: paymentmysql
     image: mysql
@@ -89,6 +109,8 @@ services:
     volumes:
       - mysql_data_paymentrr:/var/lib/mysql
       - mysql_config_paymentrr:/etc/mysql/conf.d
+    networks:
+      - rekeningrijden
   payment-service-phpmyadmin:
     image: phpmyadmin
     restart: always
@@ -96,6 +118,8 @@ services:
       - "8083:80"
     environment:
       - PMA_ARBITRARY=1
+    networks:
+      - rekeningrijden
 
   rabbitmq:
     image: rabbitmq:3.12-management-alpine
@@ -107,6 +131,8 @@ services:
       - '5672:5672'
       # HTTP management UI
       - '15672:15672'
+    networks:
+      - rekeningrijden
 
 volumes:
   car-db:
@@ -119,3 +145,7 @@ volumes:
     driver: local
   mysql_config_authrr:
     driver: local
+
+networks:
+  rekeningrijden:
+    driver: bridge
