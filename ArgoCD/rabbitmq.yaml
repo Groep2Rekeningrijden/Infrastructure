@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rabbitmq
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: default
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://charts.bitnami.com/bitnami'
+    targetRevision: '*'
+    chart: rabbitmq
+    helm:
+      values: |
+        auth:
+          username: "guest"
+          password: "guest"
+        plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s rabbitmq_delayed_message_exchange"
+        ingress:
+          enabled: true
+          ingressClassName: "nginx"
+          hostname: rabbitmq.kind.cluster
+          annotations:
+            cert-manager.io/cluster-issuer: ca-issuer
+          tls: true
+  sources: [ ]
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - PruneLast=true
+    automated: { }
