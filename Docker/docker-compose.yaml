@@ -1,47 +1,121 @@
-version: '3.4'
+version: '3.9'
 
-services:  
-  coords:
-    image: ${DOCKER_REGISTRY-}coordinateservice
-    ports: 
-        - "5050:80"  
+services:
+  coordinate-service:
+    image: fontyssa/coordinate-service
+    ports:
+      - "5050:80"
     depends_on:
       - rabbitmq
-  routerapi:
-    image: ${DOCKER_REGISTRY-}routerapi
-    ports: 
-        - "5053:80" 
+      - coordinate-service-mongo
+  coordinate-service-mongo:
+    image: mongo
+    ports:
+      - "27018:27017"
+  coordinate-service-mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "8082:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: coordinate-service-mongo
     depends_on:
-      - mongodb
-      - rabbitmq
-  routesapi:
-    image: ${DOCKER_REGISTRY-}routesapi
-    ports: 
-        - "5054:80"  
+      - coordinate-service-mongo
+
+  router-api:
+    image: fontyssa/router-api
+    ports:
+      - "5053:80"
     depends_on:
       - rabbitmq
-  mongo-express:
+
+  data-service:
+    image: fontyssa/data-service
+    ports:
+      - "5054:80"
+    depends_on:
+      - rabbitmq
+      - data-service-mongo
+  data-service-mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+  data-service-mongo-express:
     image: mongo-express
     restart: always
     ports:
       - "8081:8081"
     environment:
-      ME_CONFIG_MONGODB_SERVER: mongoDB        
+      ME_CONFIG_MONGODB_SERVER: data-service-mongo
     depends_on:
-      - mongodb
-  mongodb:
-    image: mongo
-    container_name: mongoDB-server
+      - data-service-mongo
+
+  car-service:
+    image: fontyssa/car-service
     ports:
-      - 27017:27017
-  rabbitmq:
-    container_name: "rabbitmq"
-    image: rabbitmq:3.8-management-alpine
+      - "5055:80"
+    depends_on:
+      - car-db
+  car-db:
+    image: fontyssa/postgres-extended
+    restart: always
     environment:
-     - RABBITMQ_DEFAULT_USER=guest
-     - RABBITMQ_DEFAULT_PASS=guest
+      - POSTGRES_DB=vehicle
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     ports:
-            # AMQP protocol port
-     - '5672:5672'
-            # HTTP management UI
-     - '15672:15672'
+      - '5432:5432'
+    volumes:
+      - car-db:/var/lib/postgresql/data
+
+  payment-service:
+    image: fontyssa/payment-service
+    ports:
+      - "5051:80"
+    restart: on-failure
+    depends_on:
+      - payment-service-mysql
+  payment-service-mysql:
+    container_name: paymentmysql
+    image: mysql
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - mysql_data_paymentrr:/var/lib/mysql
+      - mysql_config_paymentrr:/etc/mysql/conf.d
+  payment-service-phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - "8083:80"
+    environment:
+      - PMA_ARBITRARY=1
+
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      # AMQP protocol port
+      - '5672:5672'
+      # HTTP management UI
+      - '15672:15672'
+
+volumes:
+  car-db:
+    driver: local
+  mysql_data_paymentrr:
+    driver: local
+  mysql_config_paymentrr:
+    driver: local
+  mysql_data_authrr:
+    driver: local
+  mysql_config_authrr:
+    driver: local

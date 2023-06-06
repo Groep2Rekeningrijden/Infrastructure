@@ -76,6 +76,7 @@ Try deleting all:
 ```shell
 kubectl delete all --all
 ```
+
 2. Dangling docker volumes
 ```shell
 docker volume prune
