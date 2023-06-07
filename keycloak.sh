@@ -9,89 +9,43 @@ readonly TF_STATE=.tf-state/keycloak.tfstate
 
 # FUNCTIONS
 
-log(){
+log() {
   echo "---------------------------------------------------------------------------------------"
   echo $1
   echo "---------------------------------------------------------------------------------------"
 }
 
-keycloak(){
+keycloak() {
   log "KEYCLOAK ..."
 
   helm upgrade --install --wait --timeout 15m --atomic --namespace keycloak --create-namespace \
-    --repo https://charts.bitnami.com/bitnami keycloak keycloak --reuse-values --values - <<EOF
-auth:
-  createAdminUser: true
-  adminUser: admin
-  adminPassword: admin
-  managementUser: manager
-  managementPassword: manager
-proxyAddressForwarding: true
-ingress:
-  enabled: true
-  hostname: keycloak.kind.cluster
-  annotations:
-    cert-manager.io/cluster-issuer: ca-issuer
-  tls: true
-  ingressClassName: nginx
-postgresql:
-  enabled: true
-  auth:
-    postgresPassword: password
-    password: password
-EOF
+    --repo https://charts.bitnami.com/bitnami keycloak keycloak --reuse-values -f keycloak-values.yml
+
+  EOF
 }
 
-keycloak_config(){
+keycloak_config() {
   log "KEYCLOAK CONFIG ..."
 
   terraform -chdir=./terraform/keycloak init && terraform -chdir=./terraform/keycloak apply -auto-approve -state=$TF_STATE
 }
 
-cleanup(){
+cleanup() {
   log "CLEANUP ..."
 
   terraform -chdir=./terraform/keycloak init && terraform -chdir=./terraform/keycloak destroy -auto-approve -state=$TF_STATE || true
-  rm -f   ./terraform/keycloak/$TF_STATE
-  rm -f   ./terraform/keycloak/.terraform.lock.hcl
-  rm -rf  ./terraform/keycloak/.terraform
+  rm -f ./terraform/keycloak/$TF_STATE
+  rm -f ./terraform/keycloak/.terraform.lock.hcl
+  rm -rf ./terraform/keycloak/.terraform
 }
 
-rbac(){
+rbac() {
   log "RBAC ..."
 
-  kubectl apply -f - <<EOF
-kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: kube-admin
-subjects:
-  - kind: Group
-    name: kube-admin
-    apiGroup: rbac.authorization.k8s.io
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-EOF
-
-  kubectl apply -f - <<EOF
-kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: kube-dev
-subjects:
-  - kind: Group
-    name: kube-dev
-    apiGroup: rbac.authorization.k8s.io
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: edit
-EOF
+  kubectl apply -f /extracted/rbac-clusterrolebinding.yml
 }
 
-kubectl_config(){
+kubectl_config() {
   log "KUBECTL ..."
 
   local ID_TOKEN=$(curl -X POST https://keycloak.kind.cluster/realms/master/protocol/openid-connect/token \
@@ -132,8 +86,8 @@ cleanup
 keycloak
 keycloak_config
 rbac
-kubectl_config    user-admin
-kubectl_config    user-dev
+kubectl_config user-admin
+kubectl_config user-dev
 
 # DONE
 
