@@ -121,6 +121,31 @@ services:
     networks:
       - rekeningrijden
 
+  router-brussels:
+    image: fontyssa/router-brussels
+    environment:
+      # For type PLACE 'Brussels, Belgium', for BBOX {south: 51.075920, west: 3.180542, north: 51.522416, east: 5.907898}
+      # BBOX for belgium border (without Limburg): 51.075920,3.180542,51.522416,5.907898
+      # BBOX for luxembourg border: 49.483294,5.436859,50.344584,6.302032
+      - REGION=Brussels, Belgium
+      # Types: PLACE, BBOX
+      - REGION_TYPE=PLACE
+      - CACHE_FOLDER=/osmnx-cache
+      - MASSTRANSIT_INPUT=Coordinate_Service.DTOs:PublishCoordinatesDTO
+      - MASSTRANSIT_OUTPUT=LTS.DTOs:RouteDTO
+      # Include http/https and endpoint
+      - PAYMENT_SERVICE_URL=http://payment-service/getPrices
+      - CAR_SERVICE_URL=http://car-service/vehicle
+      - RABBITMQ_USERNAME=guest
+      - RABBITMQ_PASSWORD=guest
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_VIRTUAL_HOST=/
+      - RABBITMQ_QUEUE=py-router
+      - LOG_LEVEL=ERROR
+    volumes:
+      - osmnx-cache:/osmnx-cache
+
   rabbitmq:
     image: rabbitmq:3.12-management-alpine
     environment:
@@ -144,6 +169,8 @@ volumes:
   mysql_data_authrr:
     driver: local
   mysql_config_authrr:
+    driver: local
+  osmnx-cache:
     driver: local
 
 networks:
