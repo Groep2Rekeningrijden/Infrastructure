@@ -138,7 +138,6 @@ cert_manager() {
 
   helm upgrade --install --wait --timeout 15m --atomic --namespace cert-manager --create-namespace \
     --repo https://charts.jetstack.io cert-manager cert-manager -f /extracted/cert-manager-values.yml
-  EOF
 }
 
 cert_manager_ca_secret() {
