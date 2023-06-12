@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: router-service
+  name: router-service-luxembourg
   namespace: default
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -13,6 +13,8 @@ spec:
     targetRevision: '*'
     helm:
       parameters:
+        - name: serviceName
+          value: router-service-luxembourg
         - name: region.type
           value: BBOX
         - name: region.area
@@ -28,7 +30,7 @@ spec:
         - name: rabbitmq.host
           value: rabbitmq
         - name: rabbitmq.port
-          value: 5672
+          value: "5672"
         - name: rabbitmq.user
           value: guest
         - name: rabbitmq.password

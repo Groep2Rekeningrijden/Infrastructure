@@ -76,7 +76,18 @@ kubectl apply -f google/ingress-delivery.yml
 
 Wait for all endpoints to work and to be able to sign in to ArgoCD. Keep in mind that the same cookies are used for Keycloak and ArgoCD, so you might get 
 
+```shell
+kubectl apply -f argocd/setup/repo.yaml
+```
+```shell
+kubectl apply -f argocd/rabbitmq.yaml
+```
 
+Wait until rabbitmq is running
+
+```shell
+kubectl apply -f argocd/
+```
 
 
 # Stuff

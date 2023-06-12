@@ -13,6 +13,8 @@ spec:
     targetRevision: '*'
     helm:
       parameters:
+        - name: serviceName
+          value: router-service
         - name: region.type
           value: PLACE
         - name: region.area
