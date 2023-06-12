@@ -6,7 +6,7 @@ Based on the steps [here](https://cloud.google.com/kubernetes-engine/docs/deploy
 # Domain name via transip.nl
 export IP_ADDRESS=34.102.255.52
 export DOMAIN_NAME=oibss.nl
-export CLUSTER_NAME=rekeningrijden
+export CLUSTER_NAME=autopilot-cluster-1
 export PROJECT_ID=rekeningrijden-fontys
 ```
 
@@ -45,20 +45,39 @@ helm upgrade --install --wait --timeout 10m --atomic --create-namespace --namesp
 kubectl apply -f google/cert-letsencrypt-staging.yml
 ```
 ```shell
-helm upgrade --install --wait --timeout 10m --atomic --namespace keycloak --create-namespace --repo https://charts.bitnami.com/bitnami keycloak keycloak -f google/keycloak-values.yml
+helm upgrade --install --wait --timeout 10m --atomic --namespace default --create-namespace --repo https://charts.bitnami.com/bitnami keycloak keycloak -f google/keycloak-values.yml
 ```
 ```shell
 kubectl apply -f google/empty-secret.yml
+kubectl apply -f google/ingress-base.yml
+```
+Wait for ingress to be created and keycloak to be reachable on http.
+```shell
+kubectl apply -f google/ingress-certify.yml
+```
+Wait until the certificate resolves. This can take quite a while (10+ min)
+
+```shell
+./google/keycloak_users.sh
 ```
 ```shell
-export TF_STATE=.tf-state/keycloak.tfstate
+export TF_STATE=./google/terraform/tf-state/keycloak.tfstate
 terraform -chdir=./google/terraform/keycloak init && terraform -chdir=./google/terraform/keycloak apply -auto-approve -state=$TF_STATE
 ```
 
+```shell
+  helm upgrade --install --wait --timeout 15m --atomic --namespace default --create-namespace --repo https://argoproj.github.io/argo-helm argocd argo-cd -f ./google/argocd-values.yml
+```
 
-# Internal DNS names
+```shell
+kubectl apply -f google/cert-letsencrypt-prod.yml 
+kubectl apply -f google/ingress-delivery.yml
+```
 
-keycloak.keycloak.svc.cluster.local (port 80)
+Wait for all endpoints to work and to be able to sign in to ArgoCD. Keep in mind that the same cookies are used for Keycloak and ArgoCD, so you might get 
+
+
+
 
 # Stuff
 

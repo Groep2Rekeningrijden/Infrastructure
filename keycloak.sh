@@ -19,7 +19,7 @@ keycloak() {
   log "KEYCLOAK ..."
 
   helm upgrade --install --wait --timeout 15m --atomic --namespace keycloak --create-namespace \
-    --repo https://charts.bitnami.com/bitnami keycloak keycloak --reuse-values -f extracted/keycloak-values.yml
+    --repo https://charts.bitnami.com/bitnami keycloak keycloak --reuse-values -f./extracted/keycloak-values.yml
 
   EOF
 }
@@ -42,7 +42,7 @@ cleanup() {
 rbac() {
   log "RBAC ..."
 
-  kubectl apply -f /extracted/rbac-clusterrolebinding.yml
+  kubectl apply -f ./extracted/rbac-clusterrolebinding.yml
 }
 
 kubectl_config() {

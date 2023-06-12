@@ -2,7 +2,7 @@ terraform {
   required_providers {
     keycloak = {
       source  = "mrparkers/keycloak"
-      version = "3.6.0"
+      version = "4.3.1"
     }
   }
 }
@@ -11,10 +11,11 @@ terraform {
 provider "keycloak" {
   client_id = "admin-cli"
   username  = "admin"
-  password  = "admin"
+  password  = "@6JKMT@qsFLu"
   url       = "https://keycloak.oibss.nl"
   base_path = ""
   root_ca_certificate = ""
+  tls_insecure_skip_verify = "true"
 }
 
 locals {

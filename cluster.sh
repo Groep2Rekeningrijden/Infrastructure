@@ -123,21 +123,21 @@ cluster() {
   docker pull $KIND_NODE_IMAGE
 
   #  oidc-issuer-url: https://keycloak.kind.cluster/auth/realms/master
-  kind create cluster --name $NAME --image $KIND_NODE_IMAGE --config=/extracted/kind-cluster.yml
+  kind create cluster --name $NAME --image $KIND_NODE_IMAGE --config=./extracted/kind-cluster.yml
 }
 
 cilium() {
   log "CILIUM ..."
 
   helm upgrade --install --wait --timeout 15m --atomic --namespace kube-system --create-namespace \
-    --repo https://helm.cilium.io cilium cilium -f /extracted/cilium-values.yml
+    --repo https://helm.cilium.io cilium cilium -f ./extracted/cilium-values.yml
 }
 
 cert_manager() {
   log "CERT MANAGER ..."
 
   helm upgrade --install --wait --timeout 15m --atomic --namespace cert-manager --create-namespace \
-    --repo https://charts.jetstack.io cert-manager cert-manager -f /extracted/cert-manager-values.yml
+    --repo https://charts.jetstack.io cert-manager cert-manager -f ./extracted/cert-manager-values.yml
 }
 
 cert_manager_ca_secret() {
@@ -146,7 +146,7 @@ cert_manager_ca_secret() {
 }
 
 cert_manager_ca_issuer() {
-  kubectl apply -n cert-manager -f /extracted/cert-manager-cluster-issuer.yml
+  kubectl apply -n cert-manager -f ./extracted/cert-manager-cluster-issuer.yml
 }
 
 metallb() {
@@ -158,17 +158,17 @@ metallb() {
   local METALLB_RANGE=$METALLB_START-$METALLB_END
   echo METALLB_RANGE
   helm upgrade --install --wait --timeout 15m --atomic --namespace metallb-system --create-namespace \
-    --repo https://metallb.github.io/metallb metallb metallb -f /extracted/metallb-values.yml
+    --repo https://metallb.github.io/metallb metallb metallb -f ./extracted/metallb-values.yml
 
-  kubectl apply -f /extracted/metallb-ip-pool.yml
-  kubectl apply -f /extracted/metallb-advertisement.yml
+  kubectl apply -f ./extracted/metallb-ip-pool.yml
+  kubectl apply -f ./extracted/metallb-advertisement.yml
 }
 
 ingress() {
   log "INGRESS-NGINX ..."
 
   helm upgrade --install --wait --timeout 15m --atomic --namespace ingress-nginx --create-namespace \
-    --repo https://kubernetes.github.io/ingress-nginx ingress-nginx ingress-nginx -f /extracted/nginx-ingress-values.yml
+    --repo https://kubernetes.github.io/ingress-nginx ingress-nginx ingress-nginx -f ./extracted/nginx-ingress-values.yml
 }
 
 dnsmasq() {
