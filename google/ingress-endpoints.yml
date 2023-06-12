@@ -32,9 +32,30 @@ spec:
                   number: 80
             path: /
             pathType: Prefix
+    - host: international.oibss.nl
+      http:
+        paths:
+          - backend:
+              service:
+                name: international-api
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+    - host: tracker.oibss.nl
+      http:
+        paths:
+          - backend:
+              service:
+                name: router-api
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
   tls:
     - hosts:
         - keycloak.oibss.nl
         - argocd.oibss.nl
+        - international.oibss.nl
+        - tracker.oibss.nl
       secretName: web-ssl
-
