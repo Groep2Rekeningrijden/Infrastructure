@@ -1,4 +1,5 @@
 .ssl
+**/tf-state
 **/.tf-state
 **/.terraform.lock.hcl
 **/.terraform

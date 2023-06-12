@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: router-service
+  namespace: default
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://groep2rekeningrijden.github.io/charts/
+    chart: car-service
+    targetRevision: '*'
+    helm:
+      parameters:
+        - name: region.type
+          value: BBOX
+        - name: region.area
+          value: "{south: 51.075920, west: 3.180542, north: 51.522416, east: 5.907898}"
+        - name: serviceUri.car
+          value: http://car-service/vehicle
+        - name: serviceUri.payment
+          value: http://payment-service/getPrices
+        - name: masstransit.input
+          value: IO.Swagger.DTOS:NLRawDTO
+        - name: masstransit.output
+          value: IO.Swagger.DTOS:NLRouteDTO
+        - name: rabbitmq.host
+          value: rabbitmq
+        - name: rabbitmq.port
+          value: 5672
+        - name: rabbitmq.user
+          value: guest
+        - name: rabbitmq.password
+          value: guest
+        - name: rabbitmq.queue
+          value: py-router
+        - name: rabbitmq.virtualHost
+          value: /
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  revisionHistoryLimit: 3
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+      - CreateNamespace=true
+      - FailOnSharedResource=true
+      - PruneLast=true
+    automated:
+      prune: true
+      selfHeal: true

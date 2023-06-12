@@ -125,7 +125,7 @@ services:
     image: fontyssa/router-brussels
     environment:
       # For type PLACE 'Brussels, Belgium', for BBOX {south: 51.075920, west: 3.180542, north: 51.522416, east: 5.907898}
-      # BBOX for belgium border (without Limburg): 51.075920,3.180542,51.522416,5.907898
+      # BBOX for netherlands border (without Limburg): 51.075920,3.180542,51.522416,5.907898
       # BBOX for luxembourg border: 49.483294,5.436859,50.344584,6.302032
       - REGION=Brussels, Belgium
       # Types: PLACE, BBOX
