@@ -1,6 +1,14 @@
 version: '3.9'
 
 services:
+  international-api:
+    image: fontyssa/international-api
+    ports:
+      - "5015:80"
+    depends_on:
+      - rabbitmq
+    networks:
+      - rekeningrijden
   coordinate-service:
     image: fontyssa/coordinate-service
     ports:
@@ -122,7 +130,7 @@ services:
       - rekeningrijden
 
   router-brussels:
-    image: fontyssa/router-brussels
+    image: fontyssa/router-service
     environment:
       # For type PLACE 'Brussels, Belgium', for BBOX {south: 51.075920, west: 3.180542, north: 51.522416, east: 5.907898}
       # BBOX for netherlands border (without Limburg): 51.075920,3.180542,51.522416,5.907898
@@ -130,7 +138,6 @@ services:
       - REGION=Brussels, Belgium
       # Types: PLACE, BBOX
       - REGION_TYPE=PLACE
-      - CACHE_FOLDER=/osmnx-cache
       - MASSTRANSIT_INPUT=Coordinate_Service.DTOs:PublishCoordinatesDTO
       - MASSTRANSIT_OUTPUT=LTS.DTOs:RouteDTO
       # Include http/https and endpoint
@@ -142,20 +149,79 @@ services:
       - RABBITMQ_PORT=5672
       - RABBITMQ_VIRTUAL_HOST=/
       - RABBITMQ_QUEUE=py-router
-      - LOG_LEVEL=ERROR
+      - CACHE_FOLDER=/osmnx-cache
+      - LOG_LEVEL=WARNING
     volumes:
       - osmnx-cache:/osmnx-cache
+    networks:
+      - rekeningrijden
+
+
+  router-nl:
+    image: fontyssa/router-service
+    environment:
+      # For type PLACE 'Brussels, Belgium', for BBOX {south: 51.075920, west: 3.180542, north: 51.522416, east: 5.907898}
+      # BBOX for netherlands border: 51.075920,3.180542,51.522416,5.907898
+      # BBOX for luxembourg border: 49.483294,5.436859,50.344584,6.302032
+      - 'REGION={"south": 51.075920, "west": 3.180542, "north": 51.522416, "east": 5.907898}'
+      # Types: PLACE, BBOX
+      - REGION_TYPE=BBOX
+      - MASSTRANSIT_INPUT=IO.Swagger.DTOS:NLRawDTO
+      - MASSTRANSIT_OUTPUT=IO.Swagger.DTOS:NLRouteDTO
+      # Include http/https and endpoint
+      - PAYMENT_SERVICE_URL=http://payment-service/getPrices
+      - CAR_SERVICE_URL=http://car-service/vehicle
+      - RABBITMQ_USERNAME=guest
+      - RABBITMQ_PASSWORD=guest
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_VIRTUAL_HOST=/
+      - RABBITMQ_QUEUE=py-router-nl
+      - CACHE_FOLDER=/osmnx-cache
+      - LOG_LEVEL=WARNING
+    volumes:
+      - osmnx-cache-nl:/osmnx-cache
+    networks:
+      - rekeningrijden
+
+
+  router-lu:
+    image: fontyssa/router-service
+    environment:
+      # For type PLACE 'Brussels, Belgium', for BBOX {south: 51.075920, west: 3.180542, north: 51.522416, east: 5.907898}
+      # BBOX for netherlands border (without Limburg): 51.075920,3.180542,51.522416,5.907898
+      # BBOX for luxembourg border: 49.483294,5.436859,50.344584,6.302032
+      - 'REGION={"south": 49.483294, "west": 5.436859, "north": 50.344584, "east": 6.302032}'
+      # Types: PLACE, BBOX
+      - REGION_TYPE=BBOX
+      - MASSTRANSIT_INPUT=IO.Swagger.DTOS:LURawDTO
+      - MASSTRANSIT_OUTPUT=IO.Swagger.DTOS:LURouteDTO
+      # Include http/https and endpoint
+      - PAYMENT_SERVICE_URL=http://payment-service/getPrices
+      - CAR_SERVICE_URL=http://car-service/vehicle
+      - RABBITMQ_USERNAME=guest
+      - RABBITMQ_PASSWORD=guest
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_VIRTUAL_HOST=/
+      - RABBITMQ_QUEUE=py-router-lu
+      - CACHE_FOLDER=/osmnx-cache
+      - LOG_LEVEL=WARNING
+    volumes:
+      - osmnx-cache-lu:/osmnx-cache
+    networks:
+      - rekeningrijden
+
 
   rabbitmq:
-    image: rabbitmq:3.12-management-alpine
+    image: masstransit/rabbitmq:latest
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
     ports:
-      # AMQP protocol port
-      - '5672:5672'
-      # HTTP management UI
-      - '15672:15672'
+      - "5672:5672"
+      - "15672:15672"
+      - "15692:15692"
     networks:
       - rekeningrijden
 
@@ -172,7 +238,13 @@ volumes:
     driver: local
   osmnx-cache:
     driver: local
+  osmnx-cache-nl:
+    driver: local
+  osmnx-cache-lu:
+    driver: local
 
 networks:
   rekeningrijden:
     driver: bridge
+
+
