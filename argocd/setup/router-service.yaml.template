@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://groep2rekeningrijden.github.io/charts/
-    chart: car-service
+    chart: router-service
     targetRevision: '*'
     helm:
       parameters:
