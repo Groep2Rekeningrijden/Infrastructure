@@ -18,7 +18,7 @@ spec:
         - name: region.type
           value: BBOX
         - name: region.area
-          value: "{south: 49.483294, west: 5.436859, north: 50.344584, east: 6.302032}"
+          value: '@[@"south": 49.483294, "west": 5.436859, "north": 50.344584, "east": 6.302032@]@'
         - name: serviceUri.car
           value: http://car-service/vehicle
         - name: serviceUri.payment
