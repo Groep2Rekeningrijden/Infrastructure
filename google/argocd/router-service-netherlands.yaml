@@ -20,13 +20,13 @@ spec:
         - name: region.type
           value: "BBOX"
         - name: south
-          value: "51.075920"
+          value: "50.760785"
         - name: west
-          value: "3.180542"
+          value: "4.174805"
         - name: north
-          value: "51.522416"
+          value: "51.532669"
         - name: east
-          value: "5.907898"
+          value: "5.894165"
         - name: serviceUri.car
           value: "http://car-service/vehicle"
         - name: serviceUri.payment

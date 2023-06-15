@@ -52,10 +52,34 @@ spec:
                   number: 80
             path: /
             pathType: Prefix
+    - host: lts.oibss.nl
+      http:
+        paths:
+          - backend:
+              service:
+                name: data-service
+                port:
+                  number: 80
+            pathType: Prefix
+            path: /
+    - host: car.oibss.nl
+      http:
+        paths:
+          - backend:
+              service:
+                name: car-service
+                port:
+                  number: 80
+            pathType: Prefix
+            path: /
+
+
   tls:
     - hosts:
         - keycloak.oibss.nl
         - argocd.oibss.nl
         - international.oibss.nl
         - tracker.oibss.nl
+        - lts.oibss.nl
+        - car.oibss.nl
       secretName: web-ssl
