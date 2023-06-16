@@ -18,7 +18,9 @@ spec:
         - name: serviceName
           value: router-service-luxembourg
         - name: region.type
-          value: BBOX
+          value: PLACE
+        - name: region.area
+          value: Brussels, Belgium
         - name: region.south
           value: "49.483294"
         - name: region.west
