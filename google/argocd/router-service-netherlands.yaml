@@ -46,7 +46,7 @@ spec:
         - name: rabbitmq.password
           value: "guest"
         - name: rabbitmq.queue
-          value: "py-router"
+          value: "py-router-netherlands"
         - name: rabbitmq.virtualHost
           value: "/"
         - name: logLevel
