@@ -13,6 +13,12 @@ spec:
     repoURL: https://groep2rekeningrijden.github.io/charts/
     chart: car-service
     targetRevision: '*'
+    helm:
+      parameters:
+        - name: resources.dbMemory
+          value: 1Gi
+        - name: resources.dbCpu
+          value: 500m
   destination:
     server: https://kubernetes.default.svc
     namespace: default

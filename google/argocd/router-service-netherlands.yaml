@@ -47,6 +47,12 @@ spec:
           value: "py-router"
         - name: rabbitmq.virtualHost
           value: "/"
+        - name: logLevel
+          value: info
+        - name: resources.memory
+          value: 4Gi
+        - name: resources.cpu
+          value: 800m
   destination:
     server: https://kubernetes.default.svc
     namespace: default
