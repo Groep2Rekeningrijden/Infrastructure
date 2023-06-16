@@ -34,9 +34,9 @@ spec:
         - name: rabbitmq.port
           value: 5672
         - name: rabbitmq.user
-          value: guest
+          value: rabbit
         - name: rabbitmq.password
-          value: guest
+          value: rabbit
         - name: rabbitmq.queue
           value: py-router
         - name: rabbitmq.virtualHost

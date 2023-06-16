@@ -42,15 +42,19 @@ spec:
         - name: rabbitmq.port
           value: "5672"
         - name: rabbitmq.user
-          value: guest
+          value: rabbit
         - name: rabbitmq.password
-          value: guest
+          value: rabbit
         - name: rabbitmq.queue
           value: py-router-luxembourg
         - name: rabbitmq.virtualHost
           value: /
         - name: logLevel
           value: info
+        - name: resources.memory
+          value: 1Gi
+        - name: resources.cpu
+          value: 1
   destination:
     server: https://kubernetes.default.svc
     namespace: default

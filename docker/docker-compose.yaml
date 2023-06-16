@@ -143,8 +143,8 @@ services:
       # Include http/https and endpoint
       - PAYMENT_SERVICE_URL=http://payment-service/getPrices
       - CAR_SERVICE_URL=http://car-service/vehicle
-      - RABBITMQ_USERNAME=guest
-      - RABBITMQ_PASSWORD=guest
+      - RABBITMQ_USERNAME=rabbit
+      - RABBITMQ_PASSWORD=rabbit
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_PORT=5672
       - RABBITMQ_VIRTUAL_HOST=/
@@ -171,8 +171,8 @@ services:
       # Include http/https and endpoint
       - PAYMENT_SERVICE_URL=http://payment-service/getPrices
       - CAR_SERVICE_URL=http://car-service/vehicle
-      - RABBITMQ_USERNAME=guest
-      - RABBITMQ_PASSWORD=guest
+      - RABBITMQ_USERNAME=rabbit
+      - RABBITMQ_PASSWORD=rabbit
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_PORT=5672
       - RABBITMQ_VIRTUAL_HOST=/
@@ -199,8 +199,8 @@ services:
       # Include http/https and endpoint
       - PAYMENT_SERVICE_URL=http://payment-service/getPrices
       - CAR_SERVICE_URL=http://car-service/vehicle
-      - RABBITMQ_USERNAME=guest
-      - RABBITMQ_PASSWORD=guest
+      - RABBITMQ_USERNAME=rabbit
+      - RABBITMQ_PASSWORD=rabbit
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_PORT=5672
       - RABBITMQ_VIRTUAL_HOST=/
@@ -216,8 +216,8 @@ services:
   rabbitmq:
     image: masstransit/rabbitmq:latest
     environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_USER=rabbit
+      - RABBITMQ_DEFAULT_PASS=rabbit
     ports:
       - "5672:5672"
       - "15672:15672"
