@@ -72,7 +72,16 @@ spec:
                   number: 80
             pathType: Prefix
             path: /
-
+    - host: rekeningrijden.oibss.nl
+      http:
+        paths:
+          - backend:
+              service:
+                name: rekeningrijden-web
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
 
   tls:
     - hosts:
@@ -82,4 +91,5 @@ spec:
         - tracker.oibss.nl
         - lts.oibss.nl
         - car.oibss.nl
+        - rekeningrijden.oibss.nl
       secretName: web-ssl

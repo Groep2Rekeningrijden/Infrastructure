@@ -3,7 +3,7 @@ kind: Application
 metadata:
   labels:
     app.kubernetes.io/part-of: rekeningrijden
-  name: rekeningrijden
+  name: rekeningrijden-web
   namespace: default
   finalizers:
     - resources-finalizer.argocd.argoproj.io
