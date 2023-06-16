@@ -19,13 +19,13 @@ spec:
           value: router-service-luxembourg
         - name: region.type
           value: BBOX
-        - name: south
+        - name: region.south
           value: "49.483294"
-        - name: west
+        - name: region.west
           value: "5.436859"
-        - name: north
+        - name: region.north
           value: "50.344584"
-        - name: east
+        - name: region.east
           value: "6.302032"
         - name: serviceUri.car
           value: http://car-service/vehicle
