@@ -13,6 +13,13 @@ spec:
     repoURL: https://groep2rekeningrijden.github.io/charts/
     chart: coordinate-service
     targetRevision: '*'
+    helm:
+      values: |
+        resources:
+          memory: 500Mi
+          cpu: 500m
+          dbMemory: 800Mi
+          dbCpu: 750m
   destination:
     server: https://kubernetes.default.svc
     namespace: default

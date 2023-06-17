@@ -47,6 +47,8 @@ spec:
           value: 1Gi
         - name: resources.cpu
           value: "1"
+        - name: maxReplicas
+          value: "3"
   destination:
     server: https://kubernetes.default.svc
     namespace: default
