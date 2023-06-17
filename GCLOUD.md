@@ -39,7 +39,7 @@ gcloud compute addresses describe web-ip --format='value(address)' --global
 #kubectl apply -f google/ingress.yml
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
-helm upgrade --install --wait --timeout 10m --atomic --create-namespace --namespace cert-manager --set global.leaderElection.namespace=cert-manager cert-manager jetstack/cert-manager --reuse-values -f extracted/cert-manager-values.yml
+helm upgrade --install --wait --timeout 10m --atomic --create-namespace --namespace cert-manager --set global.leaderElection.namespace=cert-manager cert-manager jetstack/cert-manager --reuse-values -f google/cert-manager-values.yml
 ```
 ```shell
 kubectl apply -f google/cert-letsencrypt-staging.yml
@@ -89,6 +89,9 @@ Wait until rabbitmq is running
 kubectl apply -f argocd/
 ```
 
+```shell
+helm upgrade --install --wait --timeout 15m  --atomic --namespace default --create-namespace --repo https://prometheus-community.github.io/helm-charts kube-prometheus-stack kube-prometheus-stack -f google/monitoring/prometheus-values.yml
+```
 
 # Stuff
 

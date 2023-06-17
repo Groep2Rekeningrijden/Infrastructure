@@ -16,4 +16,4 @@ spec:
                   default_pass = guest
                   default_user_tags.administrator = true
   service:
-    type: LoadBalancer
+    type: ClusterIP

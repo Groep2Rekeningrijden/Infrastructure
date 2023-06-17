@@ -1,12 +1,35 @@
 dex:
   enabled: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
 redis:
   enabled: true
+  resources:
+    requests:
+      cpu: 30m
+      memory: 90Mi
 redis-ha:
   enabled: false
 repoServer:
   serviceAccount:
     create: true
+  resources:
+    requests:
+      cpu: 100m
+      memory: 200Mi
+applicationSet:
+  resources:
+    requests:
+      cpu: 150m
+      memory: 250Mi
+notifications:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 200Mi
+
 server:
 #  volumeMounts:
 #    - mountPath: /etc/ssl/certs/root-ca.pem
@@ -48,6 +71,10 @@ server:
       g, argocd-admin, role:admin
   extraArgs:
     - --insecure
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
 #  ingress:
 #    annotations:
 #      kubernetes.io/ingress.global-static-ip-name: web-ip

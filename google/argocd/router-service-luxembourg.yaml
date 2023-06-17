@@ -54,7 +54,7 @@ spec:
         - name: resources.memory
           value: 1Gi
         - name: resources.cpu
-          value: 1
+          value: 500m
   destination:
     server: https://kubernetes.default.svc
     namespace: default
