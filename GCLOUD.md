@@ -80,7 +80,7 @@ Wait for all endpoints to work and to be able to sign in to ArgoCD. Keep in mind
 kubectl apply -f argocd/setup/repo.yaml
 ```
 ```shell
-kubectl apply -f argocd/rabbitmq.yaml
+kubectl apply -f argocd/rabbitmq-cluster.yaml
 ```
 
 Wait until rabbitmq is running
@@ -88,11 +88,6 @@ Wait until rabbitmq is running
 ```shell
 kubectl apply -f argocd/
 ```
-
-```shell
-helm upgrade --install --wait --timeout 15m  --atomic --namespace default --create-namespace --repo https://prometheus-community.github.io/helm-charts kube-prometheus-stack kube-prometheus-stack -f google/monitoring/prometheus-values.yml
-```
-
 # Stuff
 
 Helm including scripts: https://medium.com/google-cloud/installing-helm-in-google-kubernetes-engine-7f07f43c536e
